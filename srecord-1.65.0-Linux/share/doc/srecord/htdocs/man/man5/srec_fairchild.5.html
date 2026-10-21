@@ -1,0 +1,141 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:00 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_fairchild</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_fairchild</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_fairchild
+- Fairchild Fairbug file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The Fairchild
+Fairbug format has 8-byte records. A file begins with an
+address record and ends with an end-of-file record.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There are three
+record types in this file format.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Address records
+are of the form</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_fairchild1.png" alt="Image srec_fairchild1.png"></p>
+
+<p style="margin-left:11%;">indicating the address for the
+following data records.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Data records
+are of the form</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_fairchild2.png" alt="Image srec_fairchild2.png"></p>
+
+<p style="margin-left:11%;">Each data record begins with an
+X and always contains 8 data bytes. The <i>ff</i> characters
+are hexadecimal byte values (8 bytes). Each data byte is
+represented by 2 hexadecimal characters. The <i>c</i>
+character is a hex digit being the the nibble-sum of the
+data bytes. A 1-digit hexadecimal checksum follows the data
+in each data record. The checksum represents, in hexadecimal
+notation, the sum of the binary equivalents of the 16 digits
+in the record; the half carry from the fourth bit is
+ignored. The programmer ignores any character (except for
+address characters and the asterisk character, which
+terminates the data transfer) between a checksum and the
+start character of the next data record. This space can be
+used for comments.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The end-of-file
+record has the form</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_fairchild3.png" alt="Image srec_fairchild3.png"></p>
+
+<p style="margin-left:11%;">The last record consists of an
+asterisk only, which indicates the end of file.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 2.4 times when represented with this
+format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example Fairchild Fairbug file. It contains the data
+&ldquo;Hello, World[rq] to be loaded at address 0x1000.
+Notice how the last record is padded with 0xFF bytes.</p>
+
+<p style="margin-left:22%;">S1000 <br>
+X48656C6C6F2C2057C <br>
+X6F726C64210AFFFF3 <br>
+*</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_fairchild4.png" alt="Image srec_fairchild4.png"></b></p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:14:59 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_cosmac</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_cosmac</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_cosmac -
+RCA Cosmac Elf file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This file takes
+the form of one or more RCA Cosmac Elf monitor commands,
+also known as the IDIOT/4 monitor. Only the change memory
+command (!M) is allowed.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The general
+form of the !M command takes the form</p>
+
+<p style="margin-left:22%;">!M<i>aaaa dd</i> ...
+<i>dd</i></p>
+
+<p style="margin-left:11%;">The !M command writes data byte
+bytes (represented by character pairs <i>dd</i>) into
+successive memory locations, started at address <i>aaaa</i>.
+Spaces between data bytes are ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Using the comma
+(,) line continuation character resumes from the next
+address in sequence.</p>
+
+<p style="margin-left:22%;">!M<i>aaaa dd</i> ... <i>dd</i>,
+<i>dd</i> ... <i>dd</i></p>
+
+<p style="margin-left:11%; margin-top: 1em">Using the
+semicolon (;) line continuation character takes an address
+on the next line</p>
+
+<p style="margin-left:22%;">!M<i>aaaa dd</i> ... <i>dd</i>;
+<i>aaaa dd</i> ... <i>dd</i></p>
+
+<p style="margin-left:11%; margin-top: 1em">It is also
+possible to have the semicolon immediately after the
+command.</p>
+
+<p style="margin-left:22%;">!M; <i>aaaa dd</i> ...
+<i>dd</i></p>
+
+<p style="margin-left:11%; margin-top: 1em">All of these
+forms may be used in combination.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in size by approximately
+2.0 times when represented with this format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example Cosmac file. It contains the data &ldquo;Hello,
+World[rq] to be loaded at address 0x1000.</p>
+
+<p style="margin-left:22%;">!M1000
+48656C6C6F2C20576F726C640A</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_cosmac1.png" alt="Image srec_cosmac1.png"></b></p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:14:59 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_ascii_hex</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_ascii_hex</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_ascii_hex
+- Ascii-Hex file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This format is
+also known as the <i>Ascii-Space-Hex</i> or
+<i>Ascii-Hex-Space</i> format. If you know who invented this
+format, please let me know. If you have a better or more
+complete description, I&rsquo;d like to know that, too.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The file starts
+with a start-of-text (STX or Control-B) character (0x02).
+Everything before the STX is ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Each data byte
+is represented as 2 hexadecimal characters, followed by an
+&quot;execution character&quot;. The default execution
+character is a space, although many programs which write
+this format omit the space character immediately preceding
+end-of-line.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The address for
+data bytes is set by using a sequence of $A<i>nnnn</i>,
+characters, where <i>nnnn</i> is the 4-character ascii
+representation of the address. The comma is required. There
+is no need for an address record unless there are gaps.
+Implicitly, the file starts a address 0 if no address is set
+before the first data byte.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The file ends
+with an end-of-text (ETX or Control-C) character (0x03).
+Everything following the ETX is ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">It is also
+possible to specify a running 16-bit checksum using a
+sequence of $S<i>nnnn</i>, characters, although this usually
+appears <i>after</i> the ETX character and is thus often
+ignored.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Variant
+Forms</b> <br>
+In addition to a space character, the execution character
+can also be percent (%) called &quot;ascii-hex-percent&quot;
+format, apostrophe (&rsquo;) or comma (,) called
+&quot;ascii-hex-comma&quot; format. The file must use the
+same execution character throughout.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If the
+execution character is a comma, the address and checksum
+commands are terminated by a dot (.) rather than a comma
+(,).</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 3.0 times when represented with this
+format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example ascii-hex file. It contains the data &ldquo;Hello,
+World[rq] to be loaded at address 0x1000.</p>
+
+<p style="margin-left:22%;">^B $A1000, <br>
+48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 0A ^C</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_ascii_hex1.png" alt="Image srec_ascii_hex1.png"></b></p>
+<hr>
+</body>
+</html>

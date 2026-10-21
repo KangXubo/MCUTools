@@ -1,0 +1,192 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:05 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_stewie</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_stewie</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_stewie -
+Stewie&rsquo;s binary file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">If you have a
+URL for documentation of this format, please let me
+know.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Any resemblance
+to the Motorola S-Record is superficial, and extends only to
+the data records. The header records and termination records
+are completely different. None of the other Motorola
+S-Records record type are available.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The
+Records</b> <br>
+All records start with an ASCII capital S character, value
+0x53, followed by a type specifier byte. All records consist
+of binary bytes.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The Header
+Record</b> <br>
+Each file starts with a fixed four byte header record.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_stewie1.png" alt="Image srec_stewie1.png"></p>
+
+<p style="margin-left:11%;"><b>The Data Records</b> <br>
+Each data record consists of 5 fields. These are the type
+field, length field, address field, data field, and the
+checksum. The lines always start with a capital S
+character.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_stewie2.png" alt="Image srec_stewie2.png"></p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="6%">
+
+
+<p>Type</p></td>
+<td width="6%"></td>
+<td width="77%">
+
+
+<p>The type field is a one byte field that specifies
+whether the record has a two-byte address field (0x31), a
+three-byte address field (0x32) or a four-byte address field
+(0x33). The address is big-endian.</p></td></tr>
+</table>
+
+<p style="margin-left:11%;">Record Length</p>
+
+<p style="margin-left:23%;">The record length field is a
+one byte field that specifies the number of bytes in the
+record following this byte.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="11%">
+
+
+<p>Address</p></td>
+<td width="1%"></td>
+<td width="77%">
+
+
+<p>This is a 2-, 3- or 4-byte address that specifies where
+the data in the record is to be loaded into memory.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="11%">
+
+
+<p>Data</p></td>
+<td width="1%"></td>
+<td width="77%">
+
+
+<p>The data field contains the executable code,
+memory-loadable data or descriptive information to be
+transferred.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;">Checksum</p>
+
+<p style="margin-left:23%;">The checksum is a one byte
+field that represents the least significant byte of the
+one&rsquo;s complement of the sum of the values represented
+by the bytes making up the record&rsquo;s length, address,
+and data fields.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The
+Termination Record</b> <br>
+Each file ends with a fixed two byte termination record.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_stewie3.png" alt="Image srec_stewie3.png"></p>
+
+<p style="margin-left:11%;"><b>Size Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 1.2 times when represented with this
+format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+hex-dump example file. It contains the data &ldquo;Hello,
+World[rq] to be loaded at address 0.</p>
+
+<p style="margin-left:22%;">0000: 53 30 30 33 53 31 10 00
+00 48 65 6C 6C 6F 2C 20 S003S1...Hello, <br>
+0010: 57 6F 72 6C 64 0A 9D 53 38 World..S8</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_stewie4.png" alt="Image srec_stewie4.png"></b></p>
+<hr>
+</body>
+</html>

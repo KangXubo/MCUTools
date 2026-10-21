@@ -1,0 +1,235 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:06 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_ti_tagged</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_ti_tagged</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_ti_tagged
+- Texas Instruments Tagged (SDSMAC) file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This format is
+also known as the <i>TI-Tagged</i> or <i>TI-SDSMAC</i>
+format.</p>
+
+<p style="margin-left:11%; margin-top: 1em">This format
+allows binary files to be uploaded and downloaded between
+two computer systems, typically between a computer system
+(such as a PC, Macintosh, or workstation) and an emulator or
+evaluation board for microcontrollers and
+microprocessors.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The
+Lines</b> <br>
+Unlike many other object formats, the lines themselves are
+not especially significant. The format consits of a number
+of <i>tagged</i> fields, and lines are composed of a series
+of these fields.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_ti_tagged1.png" alt="Image srec_ti_tagged1.png"></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Byte</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged2.png" alt="Image srec_ti_tagged2.png"></b></p>
+
+<p style="margin-left:11%;">One byte of data. The <i>nn</i>
+is 8-bit big-endian hexadecimal.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>End of
+File</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged3.png" alt="Image srec_ti_tagged3.png"></b></p>
+
+<p style="margin-left:11%;">The end of data is indicated by
+this tag. The end of line sequence (LF on Unix systems, CRLF
+on PCs) follows this tag.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>File
+Header</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged4.png" alt="Image srec_ti_tagged4.png"></b></p>
+
+<p style="margin-left:11%;">The optional start-of-file
+record begins with a tag character (&rsquo;0&rsquo;) and a
+12-character file header. The first four characters are the
+byte count of the file data. The remaining 8 characters are
+the name of the file and may be any ASCII characters, blank
+padded.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Checksum</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged5.png" alt="Image srec_ti_tagged5.png"></b></p>
+
+<p style="margin-left:11%;">The checksum is the 2s
+complement sum of the 8-bit ASCII values of characters,
+beginning with the first tag character and ending with the
+checksum tag character (7). The <i>nnnn</i> is 16-bit
+big-endian hexadecimal.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Dummy
+Checksum</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged6.png" alt="Image srec_ti_tagged6.png"></b></p>
+
+<p style="margin-left:11%;">The checksum is the 2s
+complement sum of the 8-bit ASCII values of characters,
+beginning with the first tag character and ending with the
+checksum tag character (8). The <i>nnnn</i> is 16-bit
+big-endian hexadecimal.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Address</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged7.png" alt="Image srec_ti_tagged7.png"></b></p>
+
+<p style="margin-left:11%;">Addresses may be given for any
+data byte, but none is mandatory. The file begins at 0000 if
+no address is given before the first data field. The
+<i>nnnn</i> is 16-bit big-endian hexadecimal.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Word</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged8.png" alt="Image srec_ti_tagged8.png"></b></p>
+
+<p style="margin-left:11%;">Two bytes of data. The
+<i>aa</i> and <i>bb</i> are each 8-bit big-endian
+hexadecimal.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>End of
+Record</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged9.png" alt="Image srec_ti_tagged9.png"></b></p>
+
+<p style="margin-left:11%;">The end of line sequence (LF on
+Unix systems, CRLF on PCs) is escaped using this tag. The
+checksum is reset to zero at this point.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Program
+Identifier</b></p>
+
+
+<p align="center"><b><img src="srec_ti_tagged10.png" alt="Image srec_ti_tagged10.png"></b></p>
+
+<p style="margin-left:11%;">The program identifier can
+contain a brief description of the program, or can be empty
+(<i>i.e.</i> the text portion is optional). The <i>nnnn</i>
+length (hex) of the field includes the &rsquo;K&rsquo;, the
+length and the text; it is at least 5.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 2.9 times when represented with this
+format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example TI-Tagged file. It contains the data &ldquo;Hello,
+World[rq] to be loaded at address 0x0100.</p>
+
+
+<p style="margin-left:22%;">K000590080B4865B6C6CB6F2CB2057B6F72B6C64*0A7F648F
+<br>
+:</p>
+
+<p style="margin-left:11%;">and here is another example
+from the reference below</p>
+
+<p style="margin-left:22%;">00050 7FDD4F <br>
+90000BFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFF7F400F <br>
+90010BFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFF7F3FFF <br>
+90020BFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFF7F3FEF <br>
+90030BFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFF7F3FDF <br>
+90040BFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFFBFFFF7F3FCF <br>
+:</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">http://www.dataio.com/pdf/Manuals/Unifamily/981-0014-016.pdf
+(page 6-33)</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_ti_tagged11.png" alt="Image srec_ti_tagged11.png"></b></p>
+<hr>
+</body>
+</html>

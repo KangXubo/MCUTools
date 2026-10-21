@@ -1,0 +1,176 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:04 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_msbin</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_msbin</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SOURCE">SOURCE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_msbin -
+Windows CE Binary Image Data Format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This format is
+the output of the Microsoft WinCE Platform Builder. This is
+a binary (non-text) file format. File names in this format
+typically (ambiguously) use the .bin suffix.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>File
+Format</b> <br>
+Files in this format start with a header record.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Then comes the
+data itself, organized into records.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The file
+finishes with an execution start address record. This is
+mandatory.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>File Header
+Record</b> <br>
+Data in this format start with an optional header containing
+the magic &ldquo;B000FF\n&rdquo;, followed by the image
+start (four bytes, little endian) address and the span of
+the image (highest address - lowest address + 1) (four
+bytes, little endian). The file header does not have a
+checksum; it is therefore possible that a corrupt file
+header will go undetected.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_msbin1.png" alt="Image srec_msbin1.png"></p>
+
+<p style="margin-left:11%;">There is no provision for a
+file comment of any kind.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Record</b> <br>
+Each record consists of a record start address (four bytes,
+little endian), a record length (four bytes, little endian),
+a record checksum (four bytes, little endian), followed by
+the record data. The data part of each record is raw byte
+values, no encoding.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_msbin2.png" alt="Image srec_msbin2.png"></p>
+
+<p style="margin-left:11%;">The checksum is calculated by a
+simple sum of unsigned bytes into a 32-bit accumulator.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The 12 record
+header bytes are not included in the record checksums; it is
+therefore possible that a corrupt record header will go
+undetected.</p>
+
+<p style="margin-left:11%; margin-top: 1em">It is not
+possible to place data at address zero with this format.
+Address zero is reserved for use by the execution start
+address record.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There is
+effectively no limit on the length of a record (2^32-1). It
+is not uncommon for a MsBin file to contain records with
+sizes in the tens of megabytes.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Execution
+Start Address Record</b> <br>
+Last comes a special record with the record address set to
+zero and record length set to the image execution start
+address. According to specification the record describing
+the execution start address must be always present, and must
+always be the last record in the file.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_msbin3.png" alt="Image srec_msbin3.png"></p>
+
+<p style="margin-left:11%;"><b>Commentary</b> <br>
+The MsBin files produced by SRecord are valid and can be
+successfully parsed by the command line utilities viewbin
+and cvrtbin (part of Windows CE platform).</p>
+
+<p style="margin-left:11%; margin-top: 1em">For a MsBin
+file to be usable in Microsoft WinCE Platform Builder it has
+to contain a TOC meta-structure. This is data embedded in
+the file by Microsoft WinCE Platform Builder itself.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The opposite
+conversion - from MsBin - comes in handy when analyzing a
+MsBin file (<i>i.e.</i> a WinCE image).</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 1.0 times (approaching asymptotically from
+above) when represented with this format, as the 15-byte
+file header is averaged over the data content. Holes in the
+data will also increase the size.</p>
+
+<h2>SOURCE
+<a name="SOURCE"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">http://msdn.microsoft.com/en-us/library/ms924510.aspx</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_msbin4.png" alt="Image srec_msbin4.png"></b></p>
+<hr>
+</body>
+</html>

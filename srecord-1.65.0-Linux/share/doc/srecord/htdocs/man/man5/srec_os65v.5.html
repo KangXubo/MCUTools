@@ -1,0 +1,119 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:04 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_os65v</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_os65v</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_os65v -
+OS65V Loader file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This format is
+used by Ohio Scientific OS65V-compatible loaders. This
+family of machines includes the OSI C1P, Superboard II, C2,
+C4, C8, and Challenger III, as well as the UK101, and
+Elektor Junior.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The file
+startes with a period &rsquo;.&rsquo; (0x2E), to ensure
+address entry mode. then a 4-digit hex address, followed by
+a slash &rsquo;/&rsquo; (0X2F) to enter the data entry mode.
+The initial address is always present. There is no need for
+an additional address record unless there are gaps.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Each data byte
+is represented as 2 hexadecimal characters, and is separated
+by a carriage return character (0x0D) (advance address). The
+final return character may be omitted.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The data is
+concluded with a period &rsquo;.&rsquo; (0x2E) to re-enter
+address mode. If an address to start execution is specified,
+then the last 5 bytes are <i>nnnn</i>G where <i>nnnn</i> is
+the 4-digit execution address, and G is the &rsquo;Go&rsquo;
+command.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 3.0 times when represented with this
+format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example ascii-hex file. It contains the data &ldquo;Hello,
+World[rq] to be loaded at address 0x1000, with execution at
+0x1003. (On a 6502, this is the opcode for indirect jump to
+0x2C6F.)</p>
+
+
+<p style="margin-left:11%; margin-top: 1em">1000/48^M65^M6C^M6C^M6F^M2C^M20^M57^M6F^M72^M6C^M64^M0A^M.1010G</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_os65v1.png" alt="Image srec_os65v1.png"></b></p>
+<hr>
+</body>
+</html>

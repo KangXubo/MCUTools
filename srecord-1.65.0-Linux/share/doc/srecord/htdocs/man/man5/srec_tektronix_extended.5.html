@@ -1,0 +1,208 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:05 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_tektronix_extended</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_tektronix_extended</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_tektronix_extended
+- Tektronix Extended hexadecimal file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This format
+allows binary files to be uploaded and downloaded between
+two computer systems, typically between a computer system
+(such as a PC, Macintosh, or workstation) and an emulator or
+evaluation board for microcontrollers and
+microprocessors.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The
+Lines</b> <br>
+Lines always start with a percent (%) character. Each line
+consists of 5 fields. These are the length field, the type
+field, the checksum, the address field (including address
+length), and the data field.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The
+Fields</b></p>
+
+
+<p align="center"><b><img src="srec_tektronix_extended1.png" alt="Image srec_tektronix_extended1.png"></b></p>
+
+<p style="margin-left:11%;">Record Length</p>
+
+<p style="margin-left:23%;">The record length field is a 2
+character (1 byte) field that specifies the number of
+characters (not bytes) in the record, excluding the
+percent.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="6%">
+
+
+<p>Type</p></td>
+<td width="6%"></td>
+<td width="77%">
+
+
+<p>The type field is a 1 character field that specifies
+whether the record is data (6) or termination (8).</p></td></tr>
+</table>
+
+<p style="margin-left:11%;">Checksum</p>
+
+<p style="margin-left:23%;">The checksum is an 2 character
+(1 byte) field that represents the sum of all the nibbles on
+the line, excluding the checksum.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="11%">
+
+
+<p>Address</p></td>
+<td width="1%"></td>
+<td width="77%">
+
+
+<p>This is a 9 character field. The first character is the
+address size; it is always 8. The remaining 8 chgaracters
+are the 4-byte address that specifies where the data is to
+be loaded into memory.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="11%">
+
+
+<p>Data</p></td>
+<td width="1%"></td>
+<td width="77%">
+
+
+<p>The data field contains the executable code,
+memory-loadable data or descriptive information to be
+transferred.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Record
+Types</b></p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p style="margin-top: 1em">6</p></td>
+<td width="11%"></td>
+<td width="77%">
+
+
+<p style="margin-top: 1em">A record containing data. The
+data is placed at the address specified.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>8</p></td>
+<td width="11%"></td>
+<td width="77%">
+
+
+<p>A termination record. The address field may optionally
+contain the address of the instruction to which control is
+passed. There is no data field.</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 2.5 times when represented with this
+format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example Tektronix extended file. It contains the data
+&ldquo;Hello, World&rdquo; to be loaded at address
+0x006B.</p>
+
+
+<p style="margin-left:22%;">%256D980000006B48656C6C6F2C20576F726C64210A
+<br>
+%09819800000000</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_tektronix_extended2.png" alt="Image srec_tektronix_extended2.png"></b></p>
+<hr>
+</body>
+</html>

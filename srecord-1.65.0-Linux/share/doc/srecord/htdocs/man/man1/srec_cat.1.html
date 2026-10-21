@@ -1,0 +1,1129 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:14:57 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_cat</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_cat</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#INPUT FILE SPECIFICATIONS">INPUT FILE SPECIFICATIONS</a><br>
+<a href="#OPTIONS">OPTIONS</a><br>
+<a href="#EXIT STATUS">EXIT STATUS</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_cat -
+manipulate EPROM load files</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>srec_cat</b>
+[ <i>option</i>... ] <i>filename</i>... <b><br>
+srec_cat -Help <br>
+srec_cat -VERSion</b></p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program is used to assemble the given input
+files into a single output file. The use of filters (see
+below) allows significant manipulations to be performed by
+this command.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Order</b> <br>
+The data from the input files is not immediately written to
+the output, but is stored in memory until the complete EPROM
+image has been assembled. Data is then written to the output
+file in ascending address order. The original ordering of
+the data (in those formats capable of random record
+ordering) is <i>not</i> preserved.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Comparison</b> <br>
+Because input record order is not preserved, textual
+comparison of input and output (such as the <i>diff</i>(1)
+or <i>tkdiff</i>(1) commands) can be misleading. Not only
+can lines appear in different address orders, but line
+lengths and line termination can differ as well. Use the
+<i>srec_cmp</i>(1) program to compare two EPROM load files.
+If a text comparison is essential, run both files through
+the <i>srec_cat</i>(1) program to ensure both files to be
+compared have identical record ordering and line
+lengths.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Conflicts</b> <br>
+The storing of data in memory enables the detection of data
+conflicts, typically caused by linker sections
+unintentionally overlapping.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>&bull;</p></td>
+<td width="2%"></td>
+<td width="86%">
+
+
+<p>A warning will be issued for each address which is
+redundantly set to the same value.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>&bull;</p></td>
+<td width="2%"></td>
+<td width="86%">
+
+
+<p>A fatal error will be issued if any address is set with
+contradictory values. To avoid this error use an <b>-exclude
+-within</b> filter (see <i>srec_input</i>(1)) or, to make it
+a warning, use the <b>-contradictory-bytes</b> option (see
+below).</p> </td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="1%">
+
+
+<p>&bull;</p></td>
+<td width="2%"></td>
+<td width="86%">
+
+
+<p>A warning will be issued for input files where the data
+records are not in strictly ascending address order. To
+suppress this warning, use the
+<b>-disable-sequence-warning</b> option (see below).</p></td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em">These features
+are designed to detect problems which are difficult to
+debug, and detects them <i>before</i> the data is written to
+an EPROM and run in your embedded system.</p>
+
+<h2>INPUT FILE SPECIFICATIONS
+<a name="INPUT FILE SPECIFICATIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Input may be
+qualified in two ways: you may specify a data file or a data
+generator. format and you may specify filters to apply to
+them. An input file specification looks like this:</p>
+
+<p style="margin-left:22%;"><i>data-file</i> [
+<i>filter</i> ... ] <i><br>
+data-generator</i> [ <i>filter</i> ... ]</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Files</b> <br>
+Input from data files is specified by file name and format
+name. An input file specification looks like this:</p>
+
+<p style="margin-left:22%;"><i>filename</i> [ <i>format</i>
+][ -ignore-checksums ]</p>
+
+<p style="margin-left:11%;">The default format is Motorola
+S-Record format, but <i>many</i> others are also
+understood.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Generators</b> <br>
+It is also possible to generate data, rather than read it
+from a file. You may use a generator anywhere you could use
+a file. An input generator specification looks like
+this:</p>
+
+<p style="margin-left:22%;"><b>-GENerate</b>
+<i>address-range</i> <b>-</b><i>data-source</i></p>
+
+<p style="margin-left:11%;">Generators include random data
+and various forms of constant data.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Common
+Manual Page</b> <br>
+See <i>srec_input</i>(1) for complete details of input
+specifiers. This description is in a separate manual page
+because it is common to more than one SRecord command.</p>
+
+<h2>OPTIONS
+<a name="OPTIONS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The following
+options are understood: <b><br>
+@</b><i>filename</i></p>
+
+<p style="margin-left:23%;">The named text file is read for
+additional command line arguments. Arguments are separated
+by white space (space, tab, newline, <i>etc</i>). There is
+no wildcard mechanism. There is no quoting mechanism.
+Comments, which start with &rsquo;<b>#</b>&rsquo; and extend
+to the end of the line, are ignored. Blank lines are
+ignored.</p>
+
+<p style="margin-left:11%;"><b>-Output</b> <i>filename</i>
+[ <i>format</i> ]</p>
+
+<p style="margin-left:23%;">This option may be used to
+specify the output file to be used. The special file name
+&ldquo;-[rq] is understood to mean the standard output.
+Output defaults to the standard output if this option is not
+used.</p>
+
+<p style="margin-left:23%; margin-top: 1em">The
+<i>format</i> may be specified as: <b><br>
+-Absolute_Object_Module_Format</b></p>
+
+<p style="margin-left:35%;">An Intel Absolute Object Module
+Format file will be written. (See <i>srec_aomf</i>(5) for a
+description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-Ascii_Hex</b></p>
+
+<p style="margin-left:35%;">An Ascii-Hex file will be
+written. (See <i>srec_ascii_hex</i>(5) for a description of
+this file format.)</p>
+
+<p style="margin-left:23%;"><b>-ASM</b> [ <i>prefix</i> ][
+-<i>option</i>... ]</p>
+
+<p style="margin-left:35%;">A series of assembler DB
+statements will be written.</p>
+
+<p style="margin-left:35%; margin-top: 1em">The optional
+<i>prefix</i> may be specified to change the names of the
+symbols generated. The defaults to &quot;eprom&quot; if not
+set.</p>
+
+<p style="margin-left:35%; margin-top: 1em">Several options
+are available to modify the style of output: <b><br>
+-Dot_STyle</b></p>
+
+<p style="margin-left:48%;">Use &quot;dot&quot; style
+pseudo-ops instead of words. For example .byte instead of
+the DB default.</p>
+
+<p style="margin-left:35%;"><b>-HEXadecimal_STyle</b></p>
+
+<p style="margin-left:48%;">Use hexadecimal numbers in the
+output, rather than the default decimal numbers.</p>
+
+<p style="margin-left:35%;"><b>-Section_STyle</b></p>
+
+<p style="margin-left:48%;">By default the generated
+assemble of placed at the correct address using ORG
+pseudo-ops. Section style output emits tables of section
+addresses and lengths, so the data may be related at
+runtime.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="35%"></td>
+<td width="10%">
+
+
+<p><b>-A430</b></p></td>
+<td width="3%"></td>
+<td width="52%">
+
+
+<p>Generate output which is compliant to the a430.exe
+compiler as it is used, <i>e.g.</i> in IAR Embedded
+Workbench. This is short-hand for -section-style
+-hex-style</p> </td></tr>
+<tr valign="top" align="left">
+<td width="35%"></td>
+<td width="10%">
+
+
+<p><b>-CL430</b></p></td>
+<td width="3%"></td>
+<td width="52%">
+
+
+<p>Generate output which is Code Composer Essentials
+compliant, <i>i.e.</i> the compiler of it. This is
+short-hand for -section-style -hex-style -dot-style</p></td></tr>
+</table>
+
+<p style="margin-left:35%;"><b>-Output_Word</b></p>
+
+<p style="margin-left:48%;">Generate output which is in
+two-byte words rather than bytes. This assumes little-endian
+words; you will need to use the -Byte-Swap filter if your
+target is big-endian. No attempt is made to align the words
+onto even address boundaries; use and input filter such
+as</p>
+
+<p style="margin-left:60%;"><i>input-file</i> -fill 0xFF
+-within <i>input-file</i> <br>
+-range-pad 2</p>
+
+<p style="margin-left:48%;">to pad the data to whole words
+first.</p>
+
+<p style="margin-left:23%;"><b>-Atmel_Generic</b></p>
+
+<p style="margin-left:35%;">An Atmel Generic file will be
+written. (See <i>srec_atmel_generic</i>(5) for a description
+of this file format.)</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p><b>-BASic</b></p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>A series of BASIC DATA statements will be written.</p></td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-B-Record</b></p>
+
+<p style="margin-left:35%;">A Freescale MC68EZ328
+Dragonball bootstrap b-record format file will be written.
+(See <i>srec_brecord</i>(5) for a description of this file
+format.)</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="11%">
+
+
+<p><b>-Binary</b></p></td>
+<td width="1%"></td>
+<td width="65%">
+
+
+<p>A raw binary file will be written. If you get unexpected
+results <b>please</b> see the <i>srec_binary</i>(5) manual
+for more information.</p></td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-C-Array</b> [
+<i>identifier</i> ][ -<i>option</i>... ]</p>
+
+<p style="margin-left:35%;">A C array defintion will be
+written.</p>
+
+<p style="margin-left:35%; margin-top: 1em">The optional
+<i>identifier</i> is the name of the variable to be defined,
+or bugus if not specified. <b><br>
+-INClude</b></p>
+
+<p style="margin-left:48%;">This option asks for an include
+file to be generated as well.</p>
+
+<p style="margin-left:35%;"><b>-No-CONST</b></p>
+
+<p style="margin-left:48%;">This options asks for the
+variables to not use the const keyword (they are declared
+constant be default, so that they are placed into the
+read-only segment in embedded systems).</p>
+
+<p style="margin-left:35%;"><b>-C_COMpressed</b></p>
+
+<p style="margin-left:48%;">These options ask for an
+compressed c-array whose memory gaps will not be filled.</p>
+
+<p style="margin-left:35%;"><b>-Output_Word</b></p>
+
+<p style="margin-left:48%;">This option asks for an output
+which is in words not in bytes. This is little endian, so
+you may need to</p>
+
+<p style="margin-left:35%;"><b>-PREfix</b>
+<i>string</i></p>
+
+<p style="margin-left:48%;">This option allows a string to
+be prepended to the array definition. This is commonly used
+for non-standard options common to cross compilers.</p>
+
+<p style="margin-left:35%;"><b>-POSTfix</b>
+<i>string</i></p>
+
+<p style="margin-left:48%;">This option allows a string to
+be appended to the array definition. This is commonly used
+for non-standard options common to cross compilers.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="11%">
+
+
+<p><b>-COE</b></p></td>
+<td width="1%"></td>
+<td width="65%">
+
+
+<p>This option says to use the Xilinx Coefficient File
+Format (.coe) for output. (See <i>srec_coe</i>(5) for a
+description of this file format.)</p></td></tr>
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="11%">
+
+
+<p><b>-COsmac</b></p></td>
+<td width="1%"></td>
+<td width="65%">
+
+
+<p>An RCA Cosmac Elf format file will be written. (See
+<i>srec_cosmac</i>(5) for a description of this file
+format.)</p> </td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-Dec_Binary</b></p>
+
+<p style="margin-left:35%;">A DEC Binary (XXDP) format file
+will be written. (See <i>srec_dec_binary</i>(5) for a
+description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-Elektor_Monitor52</b></p>
+
+<p style="margin-left:35%;">This option says to use the
+EMON52 format file when writing the file. (See
+<i>srec_emon52</i>(5) for a description of this file
+format.)</p>
+
+<p style="margin-left:23%;"><b>-FAIrchild</b></p>
+
+<p style="margin-left:35%;">This option says to use the
+Fairchild Fairbug format file when writing the file. (See
+<i>srec_fairchild</i>(5) for a description of this file
+format.)</p>
+
+<p style="margin-left:23%;"><b>-Fast_Load</b></p>
+
+<p style="margin-left:35%;">This option says to use the LSI
+Logic Fast Load format file when writing the file. (See
+<i>srec_fastload</i>(5) for a description of this file
+format.)</p>
+
+<p style="margin-left:23%;"><b>-Formatted_Binary</b></p>
+
+<p style="margin-left:35%;">A Formatted Binary format file
+will be written. (See <i>srec_formatted_binary</i>(5) for a
+description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-FORTH</b> [ -<i>option</i>
+]</p>
+
+<p style="margin-left:35%;">A FORTH input file will be
+written. Each line of output includes a byte value, an
+address, and a command.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="35%"></td>
+<td width="11%">
+
+
+<p><b>-RAM</b></p></td>
+<td width="2%"></td>
+<td width="52%">
+
+
+<p>The store command is C! This is the default.</p></td></tr>
+<tr valign="top" align="left">
+<td width="35%"></td>
+<td width="11%">
+
+
+<p><b>-EEPROM</b></p></td>
+<td width="2%"></td>
+<td width="52%">
+
+
+<p>The store command is EEC!</p></td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-Four_Packed_Code</b></p>
+
+<p style="margin-left:35%;">This option says to use the PFC
+format file when writing the file. (See <i>srec_fpd</i>(5)
+for a description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-HEX_Dump</b></p>
+
+<p style="margin-left:35%;">A human readable hexadecimal
+dump (including ASCII) will be printed.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p><b>-IDT</b></p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>An IDT System Integration Manager (IDT/sim) binary file
+will be written. (See <i>srec_idt</i>(5) for a description
+of this file format.)</p></td></tr>
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p><b>-Intel</b></p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>An Intel hex format file will be written. (See
+<i>srec_intel</i>(5) for a description of this file format.)
+The default is to emit &ldquo;i32hex&rdquo; 32-bit linear
+addressing; if you want &ldquo;i16hex&rdquo; 20-bit extended
+segment addressing use the <b>-address-length=3</b> option,
+if you want &ldquo;i8hex&rdquo; 16-bit addressing use the
+<b>-address-length=2</b> option.</p></td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-Intel_HeX_16</b></p>
+
+<p style="margin-left:35%;">An Intel-16 hex format (INHX16)
+file will be written. (See <i>srec_intel16</i>(5) for a
+description of this file format.)</p>
+
+
+<p style="margin-left:23%;"><b>-Lattice_Memory_Initialization_Format
+[</b> <i>width</i> <b>]</b></p>
+
+<p style="margin-left:35%;">The Memory Initialization
+Format (.mem) by Lattice Semiconductor is understood for
+writing only. (A.k.a. <b>-MEM</b>) (See <i>srec_mem</i>(5)
+for a description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-LOGisim</b></p>
+
+<p style="margin-left:35%;">LOginsim logic simuator uses
+the format See <b>-srec_logisim</b>(5) form more
+information.</p>
+
+
+<p style="margin-left:23%;"><b>-Memory_Initialization_File</b>
+[ <i>width</i> ]</p>
+
+<p style="margin-left:35%;">Memory Initialization File
+(MIF) by Altera format will be written. The <i>width</i>
+defaults to 8 bits. (See <i>srec_mif</i>(5) for a
+description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-Mips_Flash_Big_Endian <br>
+-Mips_Flash_Little_Endian</b></p>
+
+<p style="margin-left:35%;">MIPS Flash file format will be
+written. (See <i>srec_mips_flash</i>(5) for a description of
+this file format.)</p>
+
+<p style="margin-left:23%;"><b>-MOS_Technologies</b></p>
+
+<p style="margin-left:35%;">An Mos Technologies format file
+will be written. (See <i>srec_mos_tech</i>(5) for a
+description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-Motorola</b> [ <i>width</i>
+]</p>
+
+<p style="margin-left:35%;">A Motorola S-Record file will
+be written. (See <i>srec_motorola</i>(5) for a description
+of this file format.) This is the default output format. By
+default, the smallest possible address length is emitted,
+this will be S19 for data in the first 64KB; if you wish to
+force S28 use the <b>-address-length=3</b> option; if you
+wish to force S37 use the <b>-address-length=4</b>
+option</p>
+
+<p style="margin-left:35%; margin-top: 1em">The optional
+<i>width</i> argument describes the number of bytes which
+form each address multiple. For normal uses the default of
+one (1) byte is appropriate. Some systems with 16-bit or
+32-bit targets mutilate the addresses in the file; this
+option will imitate that behavior. Unlike most other
+parameters, this one cannot be guessed.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p><b>-MsBin</b></p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>This option says to use the Windows CE Binary Image Data
+Format to write the file. See <i>srec_msbin</i>(5) for a
+description of this file format.</p></td></tr>
+</table>
+
+
+<p style="margin-left:23%;"><b>-Needham_Hexadecimal</b></p>
+
+<p style="margin-left:35%;">This option says to use the
+Needham Electronics ASCII file format to write the file. See
+<i>srec_needham</i>(5) for a description of this file
+format.</p>
+
+<p style="margin-left:23%;"><b>-Ohio_Scientific</b></p>
+
+<p style="margin-left:35%;">This option says to use the
+Ohio Scientific hexadecimal format. See <i>srec_os65v</i>(5)
+for a description of this format.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="6%">
+
+
+<p><b>-PPB</b></p></td>
+<td width="6%"></td>
+<td width="65%">
+
+
+<p>This option says to use the Stag Prom Programmer binary
+format. See <i>srec_ppb</i>(5) for a description of this
+format.</p> </td></tr>
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="6%">
+
+
+<p><b>-PPX</b></p></td>
+<td width="6%"></td>
+<td width="65%">
+
+
+<p>This option says to use the Stag Prom Programmer
+hexadecimal format. See <i>srec_ppx</i>(5) for a description
+of this format.</p></td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-SIGnetics</b></p>
+
+<p style="margin-left:35%;">This option says to use the
+Signetics hex format. See <i>srec_signetics</i>(5) for a
+description of this format.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p><b>-SPAsm</b></p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>This option says to use the SPASM assembler output
+format (commonly used by PIC programmers). See
+<i>srec_spasm</i>(5) for a description of this format.</p></td></tr>
+</table>
+
+
+<p style="margin-left:23%;"><b>-SPAsm_Little_Endian</b></p>
+
+<p style="margin-left:35%;">This option says to use the
+SPASM assembler output format (commonly used by PIC
+programmers). But with the data the other way around.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="11%">
+
+
+<p><b>-STewie</b></p></td>
+<td width="1%"></td>
+<td width="65%">
+
+
+<p>A Stewie binary format file will be written. (See
+<i>srec_stewie</i>(5) for a description of this file
+format.)</p> </td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-Tektronix</b></p>
+
+<p style="margin-left:35%;">A Tektronix hex format file
+will be written. (See <i>srec_tektronix</i>(5) for a
+description of this file format.)</p>
+
+<p style="margin-left:23%;"><b>-Tektronix_Extended</b></p>
+
+<p style="margin-left:35%;">A Tektronix extended hex format
+file will be written. (See <i>srec_tektronix_extended</i>(5)
+for a description of this file format.)</p>
+
+
+<p style="margin-left:23%;"><b>-Texas_Instruments_Tagged</b></p>
+
+<p style="margin-left:35%;">A TI-Tagged format file will be
+written. (See <i>srec_ti_tagged</i>(5) for a description of
+this file format.)</p>
+
+
+<p style="margin-left:23%;"><b>-Texas_Instruments_Tagged_16</b></p>
+
+<p style="margin-left:35%;">A Texas Instruments SDSMAC 320
+format file will be written. (See
+<i>srec_ti_tagged_16</i>(5) for a description of this file
+format.)</p>
+
+
+<p style="margin-left:23%;"><b>-Texas_Instruments_TeXT</b></p>
+
+<p style="margin-left:35%;">This option says to use the
+Texas Instruments TXT (MSP430) format to write the file. See
+<i>srec_ti_txt</i>(5) for a description of this file
+format.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p><b>-TRS80</b></p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>This option says to use the Radio Shack TRS-80 object
+file format to write the file. See <i>srec_trs80</i>(5) for
+a description of this file format.</p></td></tr>
+</table>
+
+<p style="margin-left:23%;"><b>-VHdl</b> [
+<i>bytes-per-word</i> [ <i>name</i> ]]</p>
+
+<p style="margin-left:35%;">A VHDL format file will be
+written. The <i>bytes-per-word</i> defaults to one, the
+<i>name</i> defaults to eprom. The
+<i>etc/x_defs_pack.vhd</i> file in the source distribution
+contains an example ROM definitions pack for the
+type-independent output. You may need to use the -byte-swap
+filter to get the byte order you want.</p>
+
+<p style="margin-left:23%;"><b>-VMem</b> [
+<i>memory-width</i> ]</p>
+
+<p style="margin-left:35%;">A Verilog VMEM format file will
+be written. The <i>memory-width</i> may be 8, 16, 32, 64 or
+128 bits; defaults to 32 if unspecified. (See
+<i>srec_vmem</i>(5) for a description of this file format.)
+You may need to use the -byte-swap filter to get the byte
+order you want.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="11%">
+
+
+<p><b>-WILson</b></p></td>
+<td width="1%"></td>
+<td width="65%">
+
+
+<p>A wilson format file will be written. (See
+<i>srec_wilson</i>(5) for a description of this file
+format.)</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-Address_Length</b>
+<i>number</i></p>
+
+<p style="margin-left:23%;">This option many be used to
+specify the minimum number of bytes to be used in the output
+to represent an address (padding with leading zeros if
+necessary). This helps when talking to imbecilic EPROM
+programmer devices which do not fully implement the format
+specification.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="7%">
+
+
+<p><b>-CRLF</b></p></td>
+<td width="5%"></td>
+<td width="77%">
+
+
+<p>This option is short-hand for the
+<b>-line-termination=crlf</b> option. For use with
+hare-brained EPROM programmer devices which assume all the
+world uses Evil Bill&rsquo;s operating system&rsquo;s line
+termination.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;"><b>-Data_Only</b></p>
+
+<p style="margin-left:23%;">This option implies the
+<b>-disable=header</b>, <b>-disable=data-count</b>,
+<b>-disable=exec-start-address</b> and
+<b>-disable=footer</b> options.</p>
+
+<p style="margin-left:11%;"><b>-DISable</b>
+<i>feature-name</i></p>
+
+<p style="margin-left:23%;">This option is used to disable
+the output of a named feature. See the <b>-enable</b> option
+for a description of the available features.</p>
+
+<p style="margin-left:11%;"><b>-ENable</b>
+<i>feature-name</i></p>
+
+<p style="margin-left:23%;">This option is used to enable
+the output of a named feature.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p>Header</p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>This feature controls the presence of header records,
+records which appear before the data itself. Headers often,
+but not always, include descriptive text.</p></td></tr>
+</table>
+
+<p style="margin-left:23%;">Execution_Start_Address</p>
+
+<p style="margin-left:35%;">This feature controls the
+presence of execution start address records, which is where
+the monitor will jump to and start executing code once the
+hex file has finished loading.</p>
+
+<p style="margin-left:23%;">Data_Count</p>
+
+<p style="margin-left:35%;">This feature controls the
+presence of data record count records, which appear aftre
+the data, and state how many data records preceeded them.
+Usually a data integrity mechanism.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="9%">
+
+
+<p>Footer</p></td>
+<td width="3%"></td>
+<td width="65%">
+
+
+<p>This feature controls the presence of a file termination
+record, one that <i>does not</i> double as an execution
+start address record.</p></td></tr>
+</table>
+
+<p style="margin-left:23%;">Optional_Address</p>
+
+<p style="margin-left:35%;">In formats that have the
+address and the data separated or partially separated (as
+opposed to having a complete address in every record) it is
+possible to disable emitting the first address where that
+address would be zero, as these format often default the
+address to zero if no address is seen beofre the first data
+record. This is disabled by default, the zero address is
+always emitted.</p>
+
+<p style="margin-left:23%; margin-top: 1em">Not all formats
+have all of the above features. Not all formats are able to
+optionally omit any or all the above features. Feature names
+may be abbreviated like command line option names.</p>
+
+
+<p style="margin-left:11%;"><b>-Execution_Start_Address</b>
+<i>number</i></p>
+
+<p style="margin-left:23%;">This option may be used to set
+the execution start address, in those formats which support
+it. The execution start address is where the monitor will
+jump to and start executing code once the hex file has
+finished loading, think of it as a &ldquo;goto&rdquo;
+address. Usually ignored by EPROM programmer devices. This
+option implies the <b>-enable=exec-start-addr</b>
+option.</p>
+
+<p style="margin-left:23%; margin-top: 1em">Please note:
+the execution start address is a different concept than the
+first address in memory of your data. If you want to change
+where your data starts in memory, use the <b>-offset</b>
+filter.</p>
+
+<p style="margin-left:11%;"><b>-HEAder</b>
+<i>string</i></p>
+
+<p style="margin-left:23%;">This option may be used to set
+the header comment, in those formats which support it. This
+option implies the <b>-enable=header</b> option.</p>
+
+<p style="margin-left:23%; margin-top: 1em">If you need to
+inject binary data into the header, use the URL encoding
+that uses % followed by two hexadeimal characters. For
+example a backspace would be encoded as
+&ldquo;%08&rdquo;.</p>
+
+<p style="margin-left:11%;"><b>-IGnore_Checksums</b></p>
+
+<p style="margin-left:23%;">The <b>-IGnore-Checksums</b>
+option may be used to disable checksum validation of input
+files, for those formats which have checksums at all. Note
+that the checksum values are still read in and parsed (so it
+is still an error if they are missing) but their values are
+not checked. Used after an input file name, the option
+affects that file alone; used anywhere else on the command
+line, it applies to all following files.</p>
+
+<p style="margin-left:11%;"><b>-Line_Termination</b>
+<i>style-name</i></p>
+
+<p style="margin-left:23%;">This option may be used to
+specify line termination style for text output. The default
+is to use the host operating system&rsquo;s default line
+termination style (but Cygwin behaves as if it&rsquo;s
+Unix). Use this option with caution, because it will also
+introduce extra (i.e. wrong) CR bytes into binary formats.
+<br>
+Carriage_Return_Line_Feed</p>
+
+<p style="margin-left:29%;">Use the CRLF line termination
+style, typical of DOS and M$ Windows.</p>
+
+<p style="margin-left:23%;">NewLine</p>
+
+<p style="margin-left:29%;">Use the NL line termination
+style, typical of Unix and Linux.</p>
+
+<p style="margin-left:23%;">Carriage_Return</p>
+
+<p style="margin-left:29%;">Use the CR line termination
+style, typical of Apple Macintosh.</p>
+
+<p style="margin-left:23%; margin-top: 1em">All other line
+termination style names will produce a fatal error. Style
+names may be abbreviated like command line option names.</p>
+
+<p style="margin-left:11%;"><b>-Line_Length</b>
+<i>number</i></p>
+
+<p style="margin-left:23%;">This option may be used to
+limit the length of the output lines to at most
+<i>number</i> characters. (Not meaningful for binary file
+format.) Defaults to something less than 80 characters,
+depending on the format. If you need to control the maximum
+number of bytes in each output record, use the
+<b>--Ouput_Block_Size</b> option.</p>
+
+<p style="margin-left:11%;"><b>-Output_Block_Size</b>
+<i>number</i></p>
+
+<p style="margin-left:23%;">This option may be used to
+specify the exact number of data bytes to appear in each
+output record. There are format-specific limitations on this
+value, you will get an error if the value isn&rsquo;t valid.
+If you need to control the maximum number of characters on a
+line of text output, use the <b>--Line_Length</b>
+option.</p>
+
+
+<p style="margin-left:11%;"><b>-Output_Block_Packing</b></p>
+
+<p style="margin-left:23%;">From time to time, with large
+files, you may notice that your data records are spit
+unexpectedly on output. This usually happens where record
+lengths are not a power of 2. If this bothers you (or your
+comparison tools) this option may be used to repack the
+output so that SRecord&rsquo;s internal block boundaries are
+not visable in the output.</p>
+
+
+<p style="margin-left:11%;"><b>-Output_Block_Alignment</b></p>
+
+<p style="margin-left:23%;">This option is similar to the
+<b>-Output_Block_Packing</b> option, except that short
+records are used after holes to cause subsequent records to
+be placed on a block size boundary.</p>
+
+
+<p style="margin-left:11%;"><b>-Enable_Sequence_Warnings</b></p>
+
+<p style="margin-left:23%;">This option may be used to
+enable warnings about input files where the data records are
+not in strictly ascending address order. Only one warning is
+issued per input file. This is the default.</p>
+
+<p style="margin-left:23%; margin-top: 1em"><b>Note:</b>
+the output of <i>srec_cat</i>(1) is always in this
+order.</p>
+
+<p style="margin-left:23%; margin-top: 1em"><b>Note:</b>
+This option must be used <i>before</i> the input file. This
+is because if there are several files on the command line,
+each may need different settings. The setting remains in
+force until the next <b>-Disable_Sequence_Warnings</b>
+option.</p>
+
+
+<p style="margin-left:11%;"><b>-Disable_Sequence_Warnings</b></p>
+
+<p style="margin-left:23%;">This option may be used to
+disable warnings about input files where the data records
+are not in strictly ascending address order.</p>
+
+<p style="margin-left:23%; margin-top: 1em"><b>Note:</b>
+This option must be used <i>before</i> the offending input
+file. This is because if there are several files on the
+command line, each may need different settings. The setting
+remains in force until the next
+<b>-Ensable_Sequence_Warnings</b> option.</p>
+
+<p style="margin-left:11%; margin-top: 1em">All other
+options will produce a diagnostic error.</p>
+
+<p style="margin-left:11%; margin-top: 1em">All options may
+be abbreviated; the abbreviation is documented as the upper
+case letters, all lower case letters and underscores (_) are
+optional. You must use consecutive sequences of optional
+letters.</p>
+
+<p style="margin-left:11%; margin-top: 1em">All options are
+case insensitive, you may type them in upper case or lower
+case or a combination of both, case is not important.</p>
+
+<p style="margin-left:11%; margin-top: 1em">For example:
+the arguments &ldquo;-help&rdquo;, &ldquo;-HEL&rdquo; and
+&ldquo;-h&rdquo; are all interpreted to mean the
+<b>-Help</b> option. The argument &ldquo;-hlp&rdquo; will
+not be understood, because consecutive optional characters
+were not supplied.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Options and
+other command line arguments may be mixed arbitrarily on the
+command line.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The GNU long
+option names are understood. Since all option names for
+<i>srec_cat</i> are long, this means ignoring the extra
+leading &ldquo;-&rdquo;. The
+&ldquo;<b>--</b><i>option</i><b>=</b><i>value</i>&rdquo;
+convention is also understood.</p>
+
+<h2>EXIT STATUS
+<a name="EXIT STATUS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> command will exit with a status of 1 on any
+error. The <i>srec_cat</i> command will only exit with a
+status of 0 if there are no errors.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_cat1.png" alt="Image srec_cat1.png"></b></p>
+<hr>
+</body>
+</html>

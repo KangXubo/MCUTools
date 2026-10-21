@@ -1,0 +1,111 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:04 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_ppb</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_ppb</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_ppb - Stag
+Prom Programmer binary format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This is the
+native binary format of the Stag Prom Programmer.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Format</b>
+<br>
+The format is packet based. The packet is composed of an
+0x01 byte, the packet payload size (4 bytes, big-endian),
+the packet address (4 bytes, big-endian), the packet data,
+and the negative of a one-byte simple sum of the payload
+size, address and payload data.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If the packet
+payload is more than 1024 bytes, there is an intermediate
+checksum after each 1024th payload byte.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The end of file
+is indicated by a packet with a zero-length payload.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Command Line
+Option</b> <br>
+This format is specified using the <b>-PPB</b> command line
+option.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in size by approximately
+1.002 times when represented with this format (worse if
+there are many short data regions).</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">https://web.archive.org/web/20110417235840/http://www.stag.co.uk/</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_ppb1.png" alt="Image srec_ppb1.png"></b></p>
+<hr>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:14:58 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_aomf</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_aomf</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#SOURCE">SOURCE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_aomf -
+Intel Absolute Object Module Format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The Absolute
+Object Module Format (AOMF) is a subset of the 8051 OMF. The
+structure of an absolute object file (the order of the
+records in it) is similar to that of a relocatable object
+file. There are three main differences: the first is that an
+absolute object file contains one module only, the second is
+that not all the records can appear in the absolute file and
+the third is that the records can contain only absolute
+information.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Generic
+Record Format</b> <br>
+Each record starts with a record type which indicates the
+type of the record, and record length which contain the
+number of bytes in the record exclusive of the first two
+fields. The record ends with a checksum byte which contains
+the 2s complement of the sum (modulo 256) of all other bytes
+in the record. Therefore the sum (modulo 256) of all bytes
+in the record is zero.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The record
+length includes the payload and checksum fields, but
+excludes the type and length fields.</p>
+
+<p style="margin-left:11%; margin-top: 1em">All 16-bit
+fields are little-endian.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_aomf1.png" alt="Image srec_aomf1.png"></p>
+
+<p style="margin-left:11%;">Here are some of the relevant
+record types:</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_aomf2.png" alt="Image srec_aomf2.png"></p>
+
+<p style="margin-left:11%; margin-top: 1em">Names are not
+stored as C strings. Names are stored as a length byte
+followed by the contents.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Structure</b>
+<br>
+An AOMF file consists of a module header record (0x02),
+followed by one or more content (0x06), scope (0x01) or
+debug (0x12) records, and ends in a module end record
+(0x04).</p>
+
+<p style="margin-left:11%; margin-top: 1em">The records
+with the following types are extraneous (they may appear in
+the file but are ignored): 0x0E, 0x16 and 0x18 (definition
+records). All records which are not part of the AOMF and are
+not extraneous are considered erroneous.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Module
+Header Record</b></p>
+
+
+<p align="center"><b><img src="srec_aomf3.png" alt="Image srec_aomf3.png"></b></p>
+
+<p style="margin-left:11%;">Each module must starts with a
+module header record. It is used to identify the module for
+the RL51 and other future processors of 8051 object files.
+In addition to the Module Name the record contains:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p>TRN ID</p></td>
+<td width="3%"></td>
+<td width="77%">
+
+
+<p>The byte identifies the program which has generated this
+module:</p> </td></tr>
+</table>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_aomf4.png" alt="Image srec_aomf4.png"></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Module End
+Record</b></p>
+
+
+<p align="center"><b><img src="srec_aomf5.png" alt="Image srec_aomf5.png"></b></p>
+
+<p style="margin-left:11%;">The record ends the module
+sequence and contains the following information:
+characteristics <br>
+MODULE NAME</p>
+
+<p style="margin-left:23%;">The name of the module is given
+here for a consistency check. It must match the name given
+in the Module Header Record.</p>
+
+<p style="margin-left:11%;">REGISTER MASK (REG MSK)</p>
+
+<p style="margin-left:23%;">The field contains a bit for
+each of the four register banks. Each bit, when set
+specifies that the corresponding bank is used by the module:
+<br>
+Bit 0 (the least significant bit)</p>
+
+<p style="margin-left:35%;">bank #0.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="8%">
+
+
+<p>Bit 1</p></td>
+<td width="4%"></td>
+<td width="13%">
+
+
+<p>bank #1.</p></td>
+<td width="52%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="8%">
+
+
+<p>Bit 2</p></td>
+<td width="4%"></td>
+<td width="13%">
+
+
+<p>bank #2.</p></td>
+<td width="52%">
+</td></tr>
+<tr valign="top" align="left">
+<td width="23%"></td>
+<td width="8%">
+
+
+<p>Bit 3</p></td>
+<td width="4%"></td>
+<td width="13%">
+
+
+<p>bank #3.</p></td>
+<td width="52%">
+</td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Content
+Record</b></p>
+
+
+<p align="center"><b><img src="srec_aomf6.png" alt="Image srec_aomf6.png"></b></p>
+
+<p style="margin-left:11%;">This record provides one or
+more bytes of contiguous data, from which a portion of a
+memory image may be constructed.</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p style="margin-top: 1em">SEG ID</p></td>
+<td width="3%"></td>
+<td width="77%">
+
+
+<p style="margin-top: 1em">This field must be zero.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p>OFFSET</p></td>
+<td width="3%"></td>
+<td width="77%">
+
+
+<p>Gives the absolute address of the first byte of data in
+the record, within the CODE address space.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="9%">
+
+
+<p>DATA</p></td>
+<td width="3%"></td>
+<td width="77%">
+
+
+<p>A sequence of data bytes to be loaded from OFFSET to
+OFFSET+RECORDLENGTH&minus;5.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, raw binary data will expand in sized by
+approximately 1.02 times when represented with this
+format.</p>
+
+<h2>SOURCE
+<a name="SOURCE"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">http://www.intel.com/design/mcs96/swsup/omf96_pi.pdf
+<br>
+ftp://download.intel.com/design/mcs51/SWSUP/omf51.exe (zip
+archive) <br>
+http://www.elsist.net/WebSite/ftp/various/OMF51EPS.pdf</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_aomf7.png" alt="Image srec_aomf7.png"></b></p>
+<hr>
+</body>
+</html>

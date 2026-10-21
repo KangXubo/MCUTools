@@ -1,0 +1,203 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:02 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_mem</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_mem</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_mem -
+Lattice Memory Initialization format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">A Lattice
+Memory Initialization format (.mem), by Lattice
+Semiconductor, file is an ASCII text file that consists of a
+header followed by lines of memory data.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Syntax</b>
+<br>
+The data must be in one of the following formats: Bin
+(binary), Hex (hexadecimal), or Address-Hex (described
+below).</p>
+
+<p style="margin-left:11%; margin-top: 1em">For hexadecimal
+values, both upper and lower case can be used. If the data
+has fewer bits than the specified data width, the most
+significant bits are filled with 0. Any address not
+specified will be filled with 0.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Comments can be
+added at any point after the header (defined below) by
+starting the comment with a pound sign (#) or two slashes
+(//). The comment then includes everything to the end of the
+line. Comments may be added to any of the data, but never
+add comments to the header.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Header</b>
+<br>
+A .mem file starts with a header, which declares the file
+format, memory size, and address and data display radix for
+Memory Generator. The syntax of the header is:</p>
+
+<p style="margin-left:22%;">#Format=Bin | Hex | AddrHex
+<br>
+#Depth=1 <i>to</i> 65536 <br>
+#Width=1 <i>to</i> 256 <br>
+#AddrRadix=<i>index-number</i> <br>
+#DataRadix=<i>index-number</i> <br>
+#Data</p>
+
+<p style="margin-left:11%;">The <i>index-number</i> can be
+one of the following numbers. AddrRadix and DataRadix can
+have different values.</p>
+
+<p style="margin-left:22%;">Binary: 0 <br>
+Octal: 1 <br>
+Decimal: 2 <br>
+Hexadecimal: 3</p>
+
+<p style="margin-left:11%; margin-top: 1em">For example,
+the following header says the .mem file is using the binary
+format for a 32x8 memory. When displayed in Memory
+Generator, the address will be shown in hexadecimal and the
+data will be shown in binary.</p>
+
+<p style="margin-left:22%;">#Format=Bin <br>
+#Depth=32 <br>
+#Width=8 <br>
+#AddrRadix=3 <br>
+#DataRadix=0 <br>
+#Data</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Bin and Hex
+Formats</b> <br>
+The data is represented in binary or hexadecimal format.
+Each line of data specifies the contents for one memory
+location, starting with address 0. That is, the first line
+is for address 0, the second line is for address 1, and so
+on. For each line, the data is interpreted as least
+significant bit on the right.</p>
+
+<p style="margin-left:11%; margin-top: 1em">For example, in
+the Bin format, the following lines will initialize address
+0 to &ldquo;00011011&rdquo;, address 1 to
+&ldquo;11111010&rdquo; (assuming it is a 32x8 memory).</p>
+
+<p style="margin-left:22%;"># for a 32x8 memory <br>
+11011 <br>
+11111010</p>
+
+<p style="margin-left:11%; margin-top: 1em">In the Hex
+format, the following lines will initialize address 0 to
+&ldquo;003B&rdquo;, address 1 to &ldquo;FB0A&rdquo;
+(assuming it is a 32x16 memory).</p>
+
+<p style="margin-left:22%;"># for a 32x16 memory <br>
+3B <br>
+FB0A</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>AddrHex</b>
+<br>
+The data is represented in hexadecimal format. Each line
+consists of an address followed by a colon and then any
+number of data words, separated by spaces:</p>
+
+<p style="margin-left:22%;"><i>address</i><b>:</b> <i>data
+data&gt; data</i>...</p>
+
+<p style="margin-left:11%;">The data will be applied
+starting at &lt;address&gt; and filling in sequentially from
+there.</p>
+
+<p style="margin-left:11%; margin-top: 1em">For
+example:</p>
+
+<p style="margin-left:22%;">A0:03 F3 3E 4F <br>
+B2:3B 9F</p>
+
+<p style="margin-left:11%;">will initialize A0 with 03, A1
+with F3, A2 with 3E, A3 with 4F, B2 with 3B, and B3 with 9F.
+The other addresses will be initialized to 0. So A4 through
+B1 will be set to 0.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>See Also</b>
+<br>
+
+http://help.latticesemi.com/docs/webhelp/eng/wwhelp/wwhimpl/common/html/wwhelp.htm#href=Design%20Entry/memory_initialization_file.htm#1371843&amp;single=true</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+The size multiplier depends on the width selected. As files
+grow larger, their size multipliers will approach those in
+the table, from above.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_mem1.png" alt="Image srec_mem1.png"></p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Byte
+Order</b> <br>
+This format is implicitly big-endian. Use a -byte-swap
+filter if you need something different.</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_mem</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_mem</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_mem -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_mem -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_mem2.png" alt="Image srec_mem2.png"></b></p>
+<hr>
+</body>
+</html>

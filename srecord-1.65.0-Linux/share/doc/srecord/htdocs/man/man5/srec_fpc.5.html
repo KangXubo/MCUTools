@@ -1,0 +1,360 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:00 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_fpc</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_fpc</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#SYNOPSIS">SYNOPSIS</a><br>
+<a href="#Example">Example</a><br>
+<a href="#SEE ALSO">SEE ALSO</a><br>
+<a href="#AUTHOR">AUTHOR</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_fpc - four
+packed code file format</p>
+
+<h2>SYNOPSIS
+<a name="SYNOPSIS"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">All ASCII based
+file formats have one disadvantage in common: they all need
+more than double the amount of characters as opposed to the
+number of bytes to be sent. Address fields and checksums
+will add even more characters. So the shorter the records,
+the more characters have to be sent to get the file
+across.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The FPC format
+may be used to reduce the number of characters needed to
+send a file in ASCII format, although it still needs more
+characters than the actual bytes it sends. FPC stands for
+&quot;Four Packed Code&quot;. The reduction is accomplished
+by squeezing 4 real bytes into 5 ASCII characters. In fact
+every ASCII character will be a digit in the base 85 number
+system. There aren&rsquo;t enough letters, digits and
+punctuation marks available to get 85 different characters,
+but if we use both upper case and lower case letters we will
+manage. This implies that the FPC <i>is case sensitive</i>,
+as opposed to all other ASCII based file formats.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Base 85</b>
+<br>
+The numbering system is in base 85, and is somewhat hard to
+understand for us humans who are usually only familiar with
+base 10 numbers. Some of us understand base 2 and base 16 as
+well, but base 85 is for most people something new. Luckily
+we don&rsquo;t have to do any math with this number system.
+We just convert a 32 bit number into a 5 digit number in
+base 85. A 32 bit number has a range of 4,294,967,296, while
+a 5 digit number in base 85 has a range of 4,437,053,125,
+which is enough to do the trick. One drawback is that we
+always have to send multiples of 4 bytes, even if we
+actually want to send 1, 2 or 3 bytes. Unused bytes are
+padded with zeroes, and are discarded at the receiving
+end.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The digits of
+the base 85 numbering system start at %, which represents
+the value of 0. The highest value of a digit in base 85 is
+84, and is represented by the character &rsquo;z&rsquo;. If
+you want to check this with a normal ASCII table you will
+notice that we have used one character too many! Why? I
+don&rsquo;t know, but for some reason we have to skip the
+&rsquo;*&rsquo; character in the row. This means that after
+the &rsquo;)&rsquo; character follows the &rsquo;+&rsquo;
+character.</p>
+
+<p style="margin-left:11%; margin-top: 1em">We can use
+normal number conversion algorithms to generate the FPC
+digits, with this tiny difference. We have to check whether
+the digit is going to be equal or larger than the ASCII
+value for &rsquo;*&rsquo;. If this is the case we have to
+increment the digit once to stay clear of the
+&rsquo;*&rsquo;. In base 85 MSD digits go first, like in all
+number systems!</p>
+
+<p style="margin-left:11%; margin-top: 1em">The benefit of
+this all is hopefully clear. For every 4 bytes we only have
+to send 5 ASCII characters, as opposed to 8 characters for
+all other formats.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Records</b>
+<br>
+Now we take a look at the the formatting of the FPC records.
+We look at the record at byte level, not at the actual base
+85 encoded level. Only after formatting the FPC record at
+byte level we convert 4 bytes at a time to a 5 digit base 85
+number. If we don&rsquo;t have enough bytes in the record to
+fill the last group of 5 digits we will add bytes with the
+value of 0 behind the record.</p>
+
+
+<p align="center" style="margin-top: 1em"><img src="srec_fpc1.png" alt="Image srec_fpc1.png"></p>
+
+<p style="margin-left:11%;">The field are defined as:</p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="6%">
+
+
+<p><b>$</b></p></td>
+<td width="6%"></td>
+<td width="77%">
+
+
+<p>Every line starts with the character $, all other
+characters are digits of base 85.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="6%">
+
+
+<p>ss</p></td>
+<td width="6%"></td>
+<td width="77%">
+
+
+<p>The checksum. A one byte 2&rsquo;s-complement checksum
+of all bytes of the record.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="6%">
+
+
+<p>cc</p></td>
+<td width="6%"></td>
+<td width="77%">
+
+
+<p>The byte-count. A one byte value, counting all the bytes
+in the record minus 4.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="6%">
+
+
+<p>ffff</p></td>
+<td width="6%"></td>
+<td width="77%">
+
+
+<p>Format code, a two byte value, defining the record
+type.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;">aaaaaaaa</p>
+
+<p style="margin-left:23%;">The address field. A 4 byte
+number representing the first address of this record.</p>
+
+<p style="margin-left:11%;">dddddddd</p>
+
+<p style="margin-left:23%;">The actual data of this
+record.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Record
+Begin</b> <br>
+Every record begins with the ASCII character
+&quot;<b>$</b>&quot;. No spaces or tabs are allowed in a
+record. All other characters in the record are formed by
+groups of 5 digits of base 85.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Checksum
+field</b> <br>
+This field is a one byte 2&rsquo;s-complement checksum of
+the entire record. To create the checksum make a one byte
+sum from all of the bytes from all of the fields of the
+record:</p>
+
+<p style="margin-left:11%; margin-top: 1em">Then take the
+2&rsquo;s-complement of this sum to create the final
+checksum. The 2&rsquo;s-complement is simply inverting all
+bits and then increment by 1 (or using the negative
+operator). Checking the checksum at the receivers end is
+done by adding all bytes together including the checksum
+itself, discarding all carries, and the result must be $00.
+The padding bytes at the end of the line, should they exist,
+should not be included in checksum. But it doesn&rsquo;t
+really matter if they are, for their influence will be 0
+anyway.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Byte
+Count</b> <br>
+The byte count <b>cc</b> counts the number of bytes in the
+current record minus 4. So only the number of address bytes
+and the data bytes are counted and not the first 4 bytes of
+the record (checksum, byte count and format flags). The byte
+count can have any value from 0 to 255.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Usually records
+have 32 data bytes. It is not recommended to send too many
+data bytes in a record for that may increase the
+transmission time in case of errors. Also avoid sending only
+a few data bytes per record, because the address overhead
+will be too heavy in comparison to the payload.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Format
+Flags</b> <br>
+This is a 2 byte number, indicating what format is
+represented in this record. Only a few formats are
+available, so we actually waste 1 byte in each record for
+the sake of having multiples of 4 bytes.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Format code 0
+means that the address field in this record is to be treated
+as the absolute address where the first data byte of the
+record should be stored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Format code 1
+means that the address field in this record is missing.
+Simply the last known address of the previous record +1 is
+used to store the first data byte. As if the FPC format
+wasn&rsquo;t fast enough already ;-)</p>
+
+<p style="margin-left:11%; margin-top: 1em">Format code 2
+means that the address field in this record is to be treated
+as a relative address. Relative to what is not really clear.
+The relative address will remain in effect until an absolute
+address is received again.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Address
+Field</b> <br>
+The first data byte of the record is stored in the address
+specified by the Address field <b>aaaaaaaa</b>. After
+storing that data byte, the address is incremented by 1 to
+point to the address for the next data byte of the record.
+And so on, until all data bytes are stored.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The length of
+the address field is always 4 bytes, if present of course.
+So the address range for the FPC format is always 2**32.</p>
+
+<p style="margin-left:11%; margin-top: 1em">If only the
+address field is given, without any data bytes, the address
+will be set as starting address for records that have no
+address field.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Addresses
+between records are non sequential. There may be gaps in the
+addressing or the address pointer may even point to lower
+addresses as before in the same file. But every time the
+sequence of addressing must be changed, a format 0 record
+must be used. Addressing within one single record <i>is</i>
+sequential of course.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Data
+Field</b> <br>
+This field contains 0 or more data bytes. The actual number
+of data bytes is indicated by the byte count in the
+beginning of the record less the number of address bytes.
+The first data byte is stored in the location indicated by
+the address in the address field. After that the address is
+incremented by 1 and the next data byte is stored in that
+new location. This continues until all bytes are stored. If
+there are not enough data bytes to obtain a multiple of 4 we
+use 0x00 as padding bytes at the end of the record. These
+padding bytes are ignored on the receiving side.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>End of
+File</b> <br>
+End of file is recognized if the first four bytes of the
+record all contain 0x00. In base 85 this will be
+&ldquo;$%%%%%&rdquo;. This is the only decent way to
+terminate the file.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 1.7 times when represented with this
+format.</p>
+
+<h2>Example
+<a name="Example"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Now it&rsquo;s
+time for an example. In the first table you can see the byte
+representation of the file to be transferred. The 4th row of
+bytes is not a multiple of 4 bytes. But that does not
+matter, for we append $00 bytes at the end until we do have
+a multiple of 4 bytes. These padding bytes are not counted
+in the byte count however!</p>
+
+
+<p style="margin-left:22%;">D81400000000B000576F77212044696420796F7520726561
+<br>
+431400000000B0106C6C7920676F207468726F7567682061 <br>
+361400000000B0206C6C20746861742074726F75626C6520 <br>
+591100000000B030746F207265616420746869733F000000 <br>
+00000000</p>
+
+<p style="margin-left:11%;">Only after converting the bytes
+to base 85 we get the records of the FPC type file format
+presented in the next table. Note that there is always a
+multiple of 5 characters to represent a multiple of 4 bytes
+in each record.</p>
+
+
+<p style="margin-left:22%;">$kL&amp;@h%%,:,B.\?00EPuX0K3rO0JI))
+<br>
+$;UPR&rsquo;%%,:&lt;Hn&amp;FCG:at&lt;GVF(;G9wIw <br>
+$7FD1p%%,:LHmy:&gt;GTV%/KJ7@GE[kYz <br>
+$B[6\;%%,:\KIn?GFWY/qKI1G5:;-_e <br>
+$%%%%%</p>
+
+<p style="margin-left:11%;">As you can see the length of
+the lines is clearly shorter than the original ASCII
+lines.</p>
+
+<h2>SEE ALSO
+<a name="SEE ALSO"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">http://sbprojects.fol.nl/knowledge/fileformats/fpc.htm</p>
+
+<h2>AUTHOR
+<a name="AUTHOR"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This man page
+was taken from the above Web page. It was written by San
+Bergmans &lt;sanmail@bigfoot.com&gt;</p>
+
+<p style="margin-left:11%; margin-top: 1em">For extra
+points: Who invented this format? Where is it used?</p>
+<hr>
+</body>
+</html>

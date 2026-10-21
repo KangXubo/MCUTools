@@ -1,0 +1,178 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:03 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_mips_flash.5</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_mips_flash.5</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_mips_flash
+- MIPS-Flash file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The MIPS SDE
+tool chain has a <i>convert</i> program that is able to
+output this format. I have no idea what reads it, some kind
+of flash programmer I suppose.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Format</b>
+<br>
+The file must start with &rsquo;!R&rsquo; to reset the state
+machine. White space appears to be ignored, except as it
+serves to separate tokens.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Data is
+presented as 32-bit hexadecimal numbers, in the normal
+big-endian text number format. To write them to memory, you
+have to know if the target is big-endian or little-endian.
+for little endian targets, reverse the order of the bytes in
+this number.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The eight bytes
+following a &rsquo;&gt;&rsquo; are a sort of comment. The
+SDE code reads like they are displayed in the flash
+programmer as a kind of progress indicator.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The number
+following &rsquo;@&rsquo; is a new address for the following
+data.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Each segment
+must be erased before it can be written, this is done with
+the &rsquo;!E&rsquo; command. Each segment is assumed to be
+128kB in size.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Special
+segments must unlocked (with the &rsquo;!C&rsquo; command)
+and locked again (with the &rsquo;!S&rsquo; command).</p>
+
+<p style="margin-left:11%; margin-top: 1em">This file
+format contains no checksum mechanism.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Command Line
+Options</b> <br>
+This format is specified using one of the
+<b>-Mips-Flash-Big_Endian</b> or
+<b>-Mips-Flash-Little_Endian</b> options. The endian-ness
+must be specified on the command line, because there is
+nothing in the file contents to indicate the endian-ness of
+the data it contains.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 2.3 times when represented with this format
+(worse if you use shorter lines).</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example MIPS-Flash file. It contains the data &ldquo;Hello,
+World&rdquo; to be loaded at bytes address 0x0000 (but
+remember, the file contents are always multiples of four
+bytes).</p>
+
+<p style="margin-left:22%;">!R <br>
+&gt;00000xxx @00000000 !E <br>
+@00000000 <br>
+&gt;00000000 <br>
+48656C6C 6F2C2057 6F726C64 210A0000 <br>
+&gt;#DL_DONE <br>
+&gt;FINISHED</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_mips_flash1.png" alt="Image srec_mips_flash1.png"></b></p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><i>srec_cat</i></b>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_mips_flash2.png" alt="Image srec_mips_flash2.png"></b></p>
+<hr>
+</body>
+</html>

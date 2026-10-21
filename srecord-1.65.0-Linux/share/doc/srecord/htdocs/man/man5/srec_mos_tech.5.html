@@ -1,0 +1,226 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:03 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_mos_tech</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_mos_tech</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+<a href="#KIM-1 User Manual - Appendix F - Paper Tape Format">KIM-1 User Manual - Appendix F - Paper Tape Format</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_mos_tech -
+MOS Technology file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">The MOS
+Technology format allows binary files to be uploaded and
+downloaded between between a computer system (such as a PC,
+Macintosh, or workstation) and an emulator or evaluation
+board for microcontrollers and microprocessors.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The
+Lines</b> <br>
+Each line consists of 5 fields. These are the length field,
+address field, data field, and the checksum. The lines
+always start with a semicolon (;) character.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>The
+Fields</b></p>
+
+
+<p align="center"><b><img src="srec_mos_tech1.png" alt="Image srec_mos_tech1.png"></b></p>
+
+<table width="100%" border="0" rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="11%">
+
+
+<p>Length</p></td>
+<td width="1%"></td>
+<td width="77%">
+
+
+<p>The record length field is a 2 character (1 byte) field
+that specifies the number of data bytes in the record.
+Typically this is 24 or less.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="11%">
+
+
+<p>Address</p></td>
+<td width="1%"></td>
+<td width="77%">
+
+
+<p>This is a 2-byte address that specifies where the data
+in the record is to be loaded into memory, big-endian.</p></td></tr>
+<tr valign="top" align="left">
+<td width="11%"></td>
+<td width="11%">
+
+
+<p>Data</p></td>
+<td width="1%"></td>
+<td width="77%">
+
+
+<p>The data field contains the executable code,
+memory-loadable data or descriptive information to be
+transferred.</p> </td></tr>
+</table>
+
+<p style="margin-left:11%;">Checksum</p>
+
+<p style="margin-left:23%;">The checksum is an 2-byte field
+that represents the least significant two bytes of the the
+sum of the values represented by the pairs of characters
+making up the record&rsquo;s length, address, and data
+fields, big-endian.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>End of
+File</b> <br>
+The final line should have a data length of zero, and the
+data line count in the address field. The checksum is not
+the usual checksum, it is instead a repeat of the data line
+count.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 2.54 times when represented with this
+format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example MOS Technology format file. It contains the data
+&ldquo;Hello, World&rdquo; to be loaded at address 0.</p>
+
+
+<p style="margin-left:22%;">;0C000048656C6C6F2C20576F726C640454
+<br>
+;0000010001</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_mos_tech2.png" alt="Image srec_mos_tech2.png"></b></p>
+
+<h2>KIM-1 User Manual - Appendix F - Paper Tape Format
+<a name="KIM-1 User Manual - Appendix F - Paper Tape Format"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b><i>(The
+following information is reproduced from
+http://users.telenet.be/kim1-6502/6502/usrman.html#F just in
+case it vanishes from the Web.)</i></b></p>
+
+<p style="margin-left:11%; margin-top: 1em">The paper tape
+LOAD and DUMP routines store and retrieve data in a specific
+format designed to insure error free recovery. Each byte of
+data to be stored is converted to two half bytes. The half
+bytes (whose possible values are 0 to F HEX) are translated
+into their ASCII equivalents and written out onto paper tape
+in this form.</p>
+
+<p style="margin-left:11%; margin-top: 1em">Each record
+outputted begins with a &ldquo;;&rdquo; character (ASCII 3B)
+to mark the start of a valid record. The next byte
+transmitted (18HEX) or (24 decimal) is the number of data
+bytes contained in the record. The record&rsquo;s starting
+address High (1 byte, 2 characters), starting address Lo (1
+byte, 2 characters), and data (24 bytes, 48 characters)
+follow. Each record is terminated by the record&rsquo;s
+check-sum (2 bytes, 4 characters), a carriage return (ASCII
+0D), line feed (ASCII 0A), and six &ldquo;NULL&rdquo;
+characters (ASCII 00). (NULL characters cause a blank area
+on the paper tape.)</p>
+
+<p style="margin-left:11%; margin-top: 1em">The last record
+transmitted has zero data bytes (indicated by ;00) The
+starting address field is replaced by a four digit Hex
+number representing the total number of data records
+contained in the transmission, followed by the records usual
+check-sum digits. An &ldquo;XOFF&rdquo; character ends the
+transmission.</p>
+
+
+<p style="margin-left:22%;">;180000FFEEDDCCBBAA0099887766554433221122334455667788990AFC
+<br>
+;0000010001</p>
+
+<p style="margin-left:11%;">During a &ldquo;LOAD&rdquo; all
+incoming data is ignored until a &ldquo;;&rdquo; character
+is received. The receipt of non ASCII data or a mismatch
+between a records calculated check-sum and the check-sum
+read from tape will cause an error condition to be
+recognized by KIM. The check-sum is calculated by adding all
+data in the record except the &ldquo;;&rdquo; character.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The paper tape
+format described is compatible with all other MOS
+Technology, Inc. software support programs.</p>
+<hr>
+</body>
+</html>

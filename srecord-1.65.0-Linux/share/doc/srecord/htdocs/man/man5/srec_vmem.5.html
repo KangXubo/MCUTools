@@ -1,0 +1,167 @@
+<!-- Creator     : groff version 1.22.4 -->
+<!-- CreationDate: Tue Oct 18 23:15:07 2022 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>srec_vmem</title>
+
+</head>
+<body>
+
+<h1 align="center">srec_vmem</h1>
+
+<a href="#NAME">NAME</a><br>
+<a href="#DESCRIPTION">DESCRIPTION</a><br>
+<a href="#EXAMPLE">EXAMPLE</a><br>
+<a href="#REFERENCE">REFERENCE</a><br>
+<a href="#COPYRIGHT">COPYRIGHT</a><br>
+<a href="#MAINTAINER">MAINTAINER</a><br>
+
+<hr>
+
+
+<h2>NAME
+<a name="NAME"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">srec_vmem -
+vmem file format</p>
+
+<h2>DESCRIPTION
+<a name="DESCRIPTION"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">This format is
+the Verilog VMEM format. This is a hex format suitable for
+loading into Verilog simulations using the $readmemh
+call.</p>
+
+<p style="margin-left:11%; margin-top: 1em">The text file
+to be read shall contain only the following: <br>
+White space (spaces, new lines, tabs, and form-feeds) <br>
+Comments (both types of C++ comment are allowed) <br>
+Hexadecimal numbers</p>
+
+<p style="margin-left:11%; margin-top: 1em">White space
+and/or comments shall be used to separate the numbers.</p>
+
+<p style="margin-left:11%; margin-top: 1em">In the
+following discussion, the term &quot;address&quot; refers to
+an index into the array that models the memory.</p>
+
+<p style="margin-left:11%; margin-top: 1em">As the file is
+read, each number encountered is assigned to a successive
+word element of the memory. Addressing is controlled both by
+specifying start and/or finish addresses in the system task
+invocation and by specifying addresses in the data file.</p>
+
+<p style="margin-left:11%; margin-top: 1em">When addresses
+appear in the data file, the format is an &quot;at&quot;
+character (@) followed by a hexadecimal number as
+follows:</p>
+
+<p style="margin-left:22%;">@hh...h</p>
+
+<p style="margin-left:11%; margin-top: 1em">Both uppercase
+and lowercase digits are allowed in the number. No white
+space is allowed between the @ and the number. As many
+address specifications as needed within the data file can be
+used. When the system task encounters an address
+specification, it loads subsequent data starting at that
+memory address.</p>
+
+
+<p style="margin-left:11%; margin-top: 1em"><b>Commentary</b>
+<br>
+There is no checksum in this format, which can generate
+false positives when guessing file formats on input.</p>
+
+<p style="margin-left:11%; margin-top: 1em">There is no
+indication of the word size in the file, since it is
+dependent on the word type of the Verilog memory it is being
+read into. SRecord will guess the word size based on the
+number of digits it sees in the numbers, but this is only a
+guess.</p>
+
+<p style="margin-left:11%; margin-top: 1em">SRecord will
+also assume that the numbers are to be loaded big-endian;
+that is, most significant byte (first byte seen) into the
+lowest address covered by the word.</p>
+
+<p style="margin-left:11%; margin-top: 1em">You can use the
+<b>-byte-swap</b> filter to change the byte order; it takes
+an optional width of bytes to swap within.</p>
+
+<p style="margin-left:11%; margin-top: 1em"><b>Size
+Multiplier</b> <br>
+In general, binary data will expand in sized by
+approximately 2.9 times (32-bit), 3.1 times (16-bit) or 3.6
+times (8-bit) when represented with this format.</p>
+
+<h2>EXAMPLE
+<a name="EXAMPLE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">Here is an
+example Verilog VMEM file. It contains the data
+&ldquo;Hello, World[rq] to be loaded at address 0x1000.</p>
+
+<p style="margin-left:22%;">@00000400 48656C6C 6F2C2057
+6F726C64 0AFFFFFF</p>
+
+<h2>REFERENCE
+<a name="REFERENCE"></a>
+</h2>
+
+
+<p style="margin-left:11%; margin-top: 1em">IEEE
+P1364-2005/D2, Standard for Verilog Hardware Description
+Language (Draft), section 17.2.8 &quot;Loading memory data
+from a file&quot;, p. 295. <br>
+Copyright &copy; 2003 IEEE <br>
+http://www.boyd.com/1364/ <br>
+http://www.boyd.com/1364/1364-2005-d2.pdf.gz</p>
+
+<h2>COPYRIGHT
+<a name="COPYRIGHT"></a>
+</h2>
+
+
+
+<p style="margin-left:11%; margin-top: 1em"><i>srec_cat</i>
+version 1.65 <br>
+Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014,
+2018, 2019, 2022 Peter Miller</p>
+
+<p style="margin-left:11%; margin-top: 1em">The
+<i>srec_cat</i> program comes with ABSOLUTELY NO WARRANTY;
+for details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command. This is free software and you
+are welcome to redistribute it under certain conditions; for
+details use the &rsquo;<i>srec_cat -VERSion
+License</i>&rsquo; command.</p>
+
+<h2>MAINTAINER
+<a name="MAINTAINER"></a>
+</h2>
+
+
+
+<p align="center" style="margin-top: 1em"><b><img src="srec_vmem1.png" alt="Image srec_vmem1.png"></b></p>
+<hr>
+</body>
+</html>
